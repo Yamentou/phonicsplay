@@ -1,0 +1,6 @@
+alphabet.csv=Alphabet Letters
+level1.csv=Reading & Pronunciation - Part 1
+level2.csv=Reading & Pronunciation - Part 2
+level3.csv=Reading & Pronunciation - Part 3
+sentenceConnectors.csv=Sentence Connectors
+sentences_level1.csv=Sentences - Part 1
