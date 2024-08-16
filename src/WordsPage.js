@@ -12,6 +12,7 @@ const WordsPage = ({ filename, label }) => {
     fetch(`/learning_words/${filename}`)
       .then(response => response.text())
       .then(data => {
+        console.log(response.text());
         const wordList = data.split('\n').filter(word => word.trim() !== '');
         setWords(wordList);
         setCurrentWordIndex(0);
@@ -89,7 +90,7 @@ const WordsPage = ({ filename, label }) => {
             <Button onClick={handlePrevWord} style={{ marginRight: '10px' }}>Previous</Button>
             <Button onClick={() => readWordAloud(words[currentWordIndex])} style={{ marginRight: '10px' }}>Read Aloud</Button>
             <Button onClick={handleNextWord} style={{ marginRight: '10px' }}>Next</Button>
-            <Button onClick={handleHideWord} style={{ marginRight: '10px' }}>Hide Word</Button>
+            <Button onClick={handleHideWord} style={{ marginRight: '10px', minWidth: '100px' }}>Hide</Button>
           </div>
         </>
       ) : (
@@ -111,7 +112,7 @@ const WordsPage = ({ filename, label }) => {
             onChange={(e) => setSpellBeforeRead(e.target.checked)}
           />
         </div>
-        <Button onClick={resetHiddenWords} className="mt-3">Reset Hidden Words</Button>
+        <Button onClick={resetHiddenWords} className="mt-3">Reset Hidden</Button>
       </div>
     </Container>
   );

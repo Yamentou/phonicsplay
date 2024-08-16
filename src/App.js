@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Navbar, Nav, NavDropdown, Button, Form } from 'react-bootstrap';
-import { Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import ReadingPage from './components/ReadingPage';
 
@@ -11,18 +11,27 @@ const App = () => {
   const [spellBeforeRead, setSpellBeforeRead] = useState(false);
   const [fileLabels, setFileLabels] = useState({});
 
+  // Load settings and words from storage on first render
   useEffect(() => {
-    fetch('/settings.txt')
-      .then(response => response.text())
+    fetch(`${process.env.PUBLIC_URL}/settings.txt`)
+      .then(response => {
+        if (!response.ok) throw new Error('Failed to load settings');
+        return response.text(); 
+      })
       .then(data => {
-        const lines = data.split('\n');
+        const lines = data.split('\n').filter(Boolean); // Filter out empty lines
         const sectionList = {};
         lines.forEach(line => {
           const [filename, label] = line.split('=');
-          sectionList[filename] = label;
+          if (filename && label) {
+            sectionList[filename.trim()] = label.trim();
+          }
         });
         setFileLabels(sectionList);
         setSections(Object.keys(sectionList));
+      })
+      .catch(error => {
+        console.error('Error loading settings:', error);
       });
 
     const hiddenWordsFromStorage = JSON.parse(localStorage.getItem('hiddenWords')) || [];
@@ -31,6 +40,7 @@ const App = () => {
     setSpellBeforeRead(JSON.parse(localStorage.getItem('spellBeforeRead')) || false);
   }, []);
 
+  // Update localStorage whenever hiddenWords, autoRead, or spellBeforeRead change
   useEffect(() => {
     localStorage.setItem('hiddenWords', JSON.stringify(hiddenWords));
   }, [hiddenWords]);
@@ -64,15 +74,19 @@ const App = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
             <NavDropdown title="Words Files" id="basic-nav-dropdown">
-              {sections.map(section => (
-                <NavDropdown.Item
-                  key={section}
-                  as={Link}
-                  to={`/reading/${section}`}
-                >
-                  {fileLabels[section]}
-                </NavDropdown.Item>
-              ))}
+              {sections.length > 0 ? (
+                sections.map(section => (
+                  <NavDropdown.Item
+                    key={section}
+                    as={Link}
+                    to={`/reading/${section}`}
+                  >
+                    {fileLabels[section] || section}
+                  </NavDropdown.Item>
+                ))
+              ) : (
+                <NavDropdown.Item disabled>No files available</NavDropdown.Item>
+              )}
             </NavDropdown>
             <Nav.Link as={Link} to="/hidden-words">Show Hidden Words</Nav.Link>
           </Nav>
@@ -105,6 +119,7 @@ const App = () => {
   );
 };
 
+// HiddenWordsPage component
 const HiddenWordsPage = ({ hiddenWords }) => (
   <div className="text-center mt-4">
     <h2>Hidden Words</h2>
