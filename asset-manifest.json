@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/phonicsplay/static/css/main.6a531e97.css",
-    "main.js": "/phonicsplay/static/js/main.489a9371.js",
+    "main.js": "/phonicsplay/static/js/main.c0ace1dd.js",
     "index.html": "/phonicsplay/index.html",
     "main.6a531e97.css.map": "/phonicsplay/static/css/main.6a531e97.css.map",
-    "main.489a9371.js.map": "/phonicsplay/static/js/main.489a9371.js.map"
+    "main.c0ace1dd.js.map": "/phonicsplay/static/js/main.c0ace1dd.js.map"
   },
   "entrypoints": [
     "static/css/main.6a531e97.css",
-    "static/js/main.489a9371.js"
+    "static/js/main.c0ace1dd.js"
   ]
 }
