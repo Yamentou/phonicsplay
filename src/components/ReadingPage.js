@@ -11,7 +11,6 @@ const ReadingPage = ({ hiddenWords, setHiddenWords, autoRead, spellBeforeRead, o
     fetch(`${process.env.PUBLIC_URL}/learning_words/${filename}`)
       .then(response => response.text())
       .then(data => {
-        console.log(data);
         const wordList = data.split('\n').filter(word => word.trim() !== '');
         setWords(wordList);
         setCurrentWordIndex(0);
